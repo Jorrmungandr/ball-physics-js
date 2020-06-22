@@ -78,7 +78,23 @@ setInterval(() => {
   ballPos.top = +(top - movementVector[1]).toFixed(2);
   ballPos.left = +(left + movementVector[0]).toFixed(2);
 
-  console.log(ballPos);
+  // console.log(ballPos);
+
+  ballArray.forEach((bolinha) => {
+    if (bolinha.active) {
+      if (top < bolinha.top + ballSize/2 && top > bolinha.top - ballSize/2) {
+        if (left < bolinha.left + ballSize/2 && left > bolinha.left - ballSize/2) {
+          bolinha.active = false;
+          document.querySelector(`#${bolinha.id}`).style.display = 'none';
+          ballSize += 10;
+          const ball = document.querySelector('.ball');
+          ball.style.width = ballSize + 'px';
+          ball.style.height = ballSize + 'px';
+          console.log('ballSize', ballSize);
+        }
+      }
+    }
+  });
 
   ballStyle.top = `${ballPos.top}px`;
   ballStyle.left = `${ballPos.left}px`;
