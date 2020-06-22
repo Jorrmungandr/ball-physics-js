@@ -1,3 +1,5 @@
+// ============ Global Variables ============ //
+
 const ballPos = {
   top: 15,
   left: 15,
@@ -7,6 +9,10 @@ let speed = 2;
 let ballSize = 20;
 let ballOffSet = 5;
 const ballArray = [];
+
+const friction = 0.4;
+
+// ============ Generate Food ============ //
 
 for (let i = 0; i < 10; i++) {
   const randomHeight = Math.floor(Math.random() * window.innerHeight - (ballSize + 10));
@@ -24,60 +30,45 @@ for (let i = 0; i < 10; i++) {
   });
   document.body.appendChild(food);
 };
-console.log(ballArray);
 
-const moveBall = (direction) => {
-  if (speed < 5) speed *= 1.02;
+// ============ Ball Movement ============ //
 
-  let {
-    top,
-    left
-  } = ballPos
+const movementVector = [0, 0];
 
-  console.log(direction);
+const keys = [];
 
-  if (direction === 'w' && ballPos.top > ballOffSet)
-    ballPos.top -= speed;
-  if (direction === 'a' && ballPos.left > ballOffSet)
-    ballPos.left -= speed;
-  if (direction === 's' && ballPos.top < window.innerHeight - (ballSize - ballOffSet))
-    ballPos.top += speed;
-  if (direction === 'd' && ballPos.left < window.innerWidth - (ballSize - ballOffSet))
-    ballPos.left += speed;
-  const ballStyle = document.querySelector('.ball').style;
+// Add key pressed to keys
+window.addEventListener('keydown', (event) => {
+  const { key } = event;
 
-  ballArray.forEach((bolinha) => {
-    if (bolinha.active) {
-      if (top < bolinha.top + (ballSize - ballOffSet) && top > bolinha.top - (ballSize - ballOffSet)) {
-        if (left < bolinha.left + (ballSize - ballOffSet) && left > bolinha.left - (ballSize - ballOffSet)) {
-          bolinha.active = false;
-          document.querySelector(`#${bolinha.id}`).style.display = 'none';
-          ballSize += 10;
-          ballOffSet += 5;
-          const ball = document.querySelector('.ball');
-          ball.style.width = ballSize + 'px';
-          ball.style.height = ballSize + 'px';
-          console.log('ballSize', ballSize);
-        }
-      }
-    }
-  });
-
-  ballStyle.top = `${top}px`;
-  ballStyle.left = `${left}px`;
-};
-
-window.addEventListener('keypress', (event) => {
-  const {
-    key
-  } = event;
-  if (['w', 'a', 's', 'd'].indexOf(key) !== -1)
-    moveBall(key);
-  else
-    console.log('Invalid Movement');
+  if (keys.indexOf(key) === -1) keys.push(key);
 });
 
-
+// Remove key pressed from keys
 window.addEventListener('keyup', (event) => {
-  speed = 2;
+  const { key } = event;
+
+  const index = keys.indexOf(key);
+
+  if (index !== -1) keys.splice(index, 1);
 });
+
+setInterval(() => {
+  const up = keys.includes('w');
+  const left = keys.includes('a');
+  const down = keys.includes('s');
+  const right = keys.includes('d');
+
+  const forceVector = [+up, +left, +down, +right];
+
+  movementVector[0] += forceVector[3] * 0.1;
+  movementVector[1] += forceVector[0] * 0.1;
+  movementVector[0] -= forceVector[1] * 0.1;
+  movementVector[1] -= forceVector[2] * 0.1;
+}, 10);
+
+// ============ Apply Movement Vector ============ //
+
+setInterval(() => {
+  const ball = document.querySelector('.ball');
+}, 10)
