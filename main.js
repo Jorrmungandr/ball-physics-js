@@ -5,12 +5,11 @@ const ballPos = {
   left: 15,
 };
 
-let speed = 2;
 let ballSize = 20;
 let ballOffSet = 5;
 const ballArray = [];
 
-const friction = 0.4;
+const friction = 0.012;
 
 // ============ Generate Food ============ //
 
@@ -61,14 +60,31 @@ setInterval(() => {
 
   const forceVector = [+up, +left, +down, +right];
 
-  movementVector[0] += forceVector[3] * 0.1;
-  movementVector[1] += forceVector[0] * 0.1;
-  movementVector[0] -= forceVector[1] * 0.1;
-  movementVector[1] -= forceVector[2] * 0.1;
+  movementVector[0] += forceVector[3] * 0.04;
+  movementVector[1] += forceVector[0] * 0.04;
+  movementVector[0] -= forceVector[1] * 0.04;
+  movementVector[1] -= forceVector[2] * 0.04;
 }, 10);
 
 // ============ Apply Movement Vector ============ //
 
 setInterval(() => {
-  const ball = document.querySelector('.ball');
-}, 10)
+  const ballStyle = document.querySelector('.ball').style;
+
+  const { top, left } = ballPos;
+
+  ballPos.top = top - movementVector[1];
+  ballPos.left = left + movementVector[0];
+
+  console.log(ballPos);
+
+  ballStyle.top = `${ballPos.top}px`;
+  ballStyle.left = `${ballPos.left}px`;
+}, 10);
+
+// ============ Apply Friction ============ //
+
+setInterval(() => {
+  movementVector[0] = movementVector[0] * (1 - friction);
+  movementVector[1] = movementVector[1] * (1 - friction);
+}, 10);
