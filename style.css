@@ -25,3 +25,24 @@ body, html {
   border: 3px solid rgb(0, 255, 0);
   border-radius: 50%;
 }
+
+header {
+  width: 100%;
+  position: fixed;
+  display: flex;
+  justify-content: flex-end;
+  z-index: 2;
+}
+
+header button {
+  margin: 10px;
+  border: none;
+  background-color: #EF4D52;
+  color: #F9F9F9;
+  padding: 10px 30px;
+  border-radius: 2px;
+  font-weight: 600px;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
+}

@@ -6,28 +6,30 @@ const ballPos = {
 };
 
 let ballSize = 20;
-let ballOffSet = 5;
 const ballArray = [];
 
-const friction = 0.012;
+const friction = 0.011;
+const acceleration = 0.03;
 
 // ============ Generate Food ============ //
 
-for (let i = 0; i < 10; i++) {
-  const randomHeight = Math.floor(Math.random() * window.innerHeight - (ballSize + 10));
-  const randomWidth = Math.floor(Math.random() * window.innerWidth - (ballSize + 10));
-  const food = document.createElement('div');
-  food.id = `food-${Math.floor(Math.random() * 10 ** 10)}`;
-  food.className = 'food';
-  food.style.top = randomHeight + 'px';
-  food.style.left = randomWidth + 'px';
-  ballArray.push({
-    id: food.id,
-    top: randomHeight,
-    left: randomWidth,
-    active: true,
-  });
-  document.body.appendChild(food);
+const generateFood = () => {
+  for (let i = 0; i < 10; i++) {
+    const randomHeight = Math.floor(Math.random() * window.innerHeight - (ballSize + 10));
+    const randomWidth = Math.floor(Math.random() * window.innerWidth - (ballSize + 10));
+    const food = document.createElement('div');
+    food.id = `food-${Math.floor(Math.random() * 10 ** 10)}`;
+    food.className = 'food';
+    food.style.top = randomHeight + 'px';
+    food.style.left = randomWidth + 'px';
+    ballArray.push({
+      id: food.id,
+      top: randomHeight,
+      left: randomWidth,
+      active: true,
+    });
+    document.body.appendChild(food);
+  };
 };
 
 // ============ Ball Movement ============ //
@@ -60,10 +62,10 @@ setInterval(() => {
 
   const forceVector = [+up, +left, +down, +right];
 
-  movementVector[0] += forceVector[3] * 0.04;
-  movementVector[1] += forceVector[0] * 0.04;
-  movementVector[0] -= forceVector[1] * 0.04;
-  movementVector[1] -= forceVector[2] * 0.04;
+  movementVector[0] += forceVector[3] * acceleration;
+  movementVector[1] += forceVector[0] * acceleration;
+  movementVector[0] -= forceVector[1] * acceleration;
+  movementVector[1] -= forceVector[2] * acceleration;
 }, 10);
 
 // ============ Apply Movement Vector ============ //
@@ -73,8 +75,8 @@ setInterval(() => {
 
   const { top, left } = ballPos;
 
-  ballPos.top = top - movementVector[1];
-  ballPos.left = left + movementVector[0];
+  ballPos.top = +(top - movementVector[1]).toFixed(2);
+  ballPos.left = +(left + movementVector[0]).toFixed(2);
 
   console.log(ballPos);
 
@@ -87,4 +89,5 @@ setInterval(() => {
 setInterval(() => {
   movementVector[0] = movementVector[0] * (1 - friction);
   movementVector[1] = movementVector[1] * (1 - friction);
+  // console.log(movementVector);
 }, 10);
