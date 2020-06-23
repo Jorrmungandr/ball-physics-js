@@ -9,7 +9,7 @@ let ballSize = 20;
 const ballArray = [];
 
 const friction = 0.011;
-const acceleration = 0.03;
+const acceleration = 0.05;
 
 // ============ Generate Food ============ //
 
@@ -82,16 +82,14 @@ setInterval(() => {
 
   ballArray.forEach((bolinha) => {
     if (bolinha.active) {
-      if (top < bolinha.top + ballSize/2 && top > bolinha.top - ballSize/2) {
-        if (left < bolinha.left + ballSize/2 && left > bolinha.left - ballSize/2) {
-          bolinha.active = false;
-          document.querySelector(`#${bolinha.id}`).style.display = 'none';
-          ballSize += 10;
-          const ball = document.querySelector('.ball');
-          ball.style.width = ballSize + 'px';
-          ball.style.height = ballSize + 'px';
-          console.log('ballSize', ballSize);
-        }
+      // (x - center_x)^2 + (y - center_y)^2 < radius^2
+      if ((bolinha.left - ballPos.left) ** 2 + (bolinha.top - ballPos.top) ** 2 < (ballSize/2) ** 2) {
+        bolinha.active = false;
+        document.querySelector(`#${bolinha.id}`).style.display = 'none';
+        ballSize += 10;
+        const ball = document.querySelector('.ball');
+        ball.style.width = ballSize + 'px';
+        ball.style.height = ballSize + 'px';
       }
     }
   });
