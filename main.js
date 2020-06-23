@@ -42,16 +42,14 @@ const keys = [];
 window.addEventListener('keydown', (event) => {
   const { key } = event;
 
-  if (keys.indexOf(key) === -1) keys.push(key);
+  if (!keys.includes(key)) keys.push(key);
 });
 
 // Remove key pressed from keys
 window.addEventListener('keyup', (event) => {
   const { key } = event;
 
-  const index = keys.indexOf(key);
-
-  if (index !== -1) keys.splice(index, 1);
+  if (keys.includes(key)) keys.splice(keys.indexOf(key), 1);
 });
 
 setInterval(() => {
@@ -82,14 +80,15 @@ setInterval(() => {
 
   ballArray.forEach((bolinha) => {
     if (bolinha.active) {
-      // (x - center_x)^2 + (y - center_y)^2 < radius^2
-      if ((bolinha.left - ballPos.left) ** 2 + (bolinha.top - ballPos.top) ** 2 < (ballSize/2) ** 2) {
+      const radius = ballSize / 2;
+
+      if ((bolinha.left - ballPos.left) ** 2 + (bolinha.top - ballPos.top) ** 2 <= radius ** 2) {
         bolinha.active = false;
         document.querySelector(`#${bolinha.id}`).style.display = 'none';
-        ballSize += 10;
-        const ball = document.querySelector('.ball');
-        ball.style.width = ballSize + 'px';
-        ball.style.height = ballSize + 'px';
+        ballSize += 1;
+
+        ballStyle.width = `${ballSize}px`;
+        ballStyle.height = `${ballSize}px`;
       }
     }
   });
@@ -103,5 +102,27 @@ setInterval(() => {
 setInterval(() => {
   movementVector[0] = movementVector[0] * (1 - friction);
   movementVector[1] = movementVector[1] * (1 - friction);
-  // console.log(movementVector);
 }, 10);
+
+// ============ Wall Collision ============ //
+
+setInterval(() => {
+  const radius = ballSize / 2;
+
+  if (ballPos.top <= radius + 5) {
+    // top
+    movementVector[1] = movementVector[1] * -1;
+  }
+  if (ballPos.left <= radius + 5) {
+    // left
+    movementVector[0] = movementVector[0] * -1;
+  }
+  if (window.innerHeight - ballPos.top <= radius + 5) {
+    // bottom
+    movementVector[1] = movementVector[1] * -1;
+  }
+  if (window.innerWidth - ballPos.left <= radius + 5) {
+    // right
+    movementVector[0] = movementVector[0] * -1;
+  }
+}, 10)
