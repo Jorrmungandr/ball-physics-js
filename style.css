@@ -10,8 +10,6 @@ body, html {
   width: 20px;
   height: 20px;
   position: absolute;
-  top: 15px;
-  left: 15px;
   transform: translate(-50%, -50%);
   z-index: 2;
   transition: width .5s ease-in-out, height .5s ease-in-out;
@@ -24,4 +22,25 @@ body, html {
   background-color: rgb(98, 128, 98);
   border: 3px solid rgb(0, 255, 0);
   border-radius: 50%;
+}
+
+header {
+  width: 100%;
+  position: fixed;
+  display: flex;
+  justify-content: flex-end;
+  z-index: 2;
+}
+
+header button {
+  margin: 10px;
+  border: none;
+  background-color: #EF4D52;
+  color: #F9F9F9;
+  padding: 10px 30px;
+  border-radius: 2px;
+  font-weight: 600px;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
 }
