@@ -1,15 +1,16 @@
 // ============ Global Variables ============ //
 
 const ballPos = {
-  top: 15,
-  left: 15,
+  top: window.innerHeight / 2,
+  left: window.innerWidth / 2,
 };
 
 let ballSize = 20;
 const ballArray = [];
 
-const friction = 0.011;
-const acceleration = 0.05;
+const friction = 0.01;
+const acceleration = 0.03;
+const framerate = 1;
 
 // ============ Generate Food ============ //
 
@@ -64,7 +65,7 @@ setInterval(() => {
   movementVector[1] += forceVector[0] * acceleration;
   movementVector[0] -= forceVector[1] * acceleration;
   movementVector[1] -= forceVector[2] * acceleration;
-}, 10);
+}, framerate);
 
 // ============ Apply Movement Vector ============ //
 
@@ -76,8 +77,6 @@ setInterval(() => {
   ballPos.top = +(top - movementVector[1]).toFixed(2);
   ballPos.left = +(left + movementVector[0]).toFixed(2);
 
-  // console.log(ballPos);
-
   ballArray.forEach((bolinha) => {
     if (bolinha.active) {
       const radius = ballSize / 2;
@@ -85,7 +84,7 @@ setInterval(() => {
       if ((bolinha.left - ballPos.left) ** 2 + (bolinha.top - ballPos.top) ** 2 <= radius ** 2) {
         bolinha.active = false;
         document.querySelector(`#${bolinha.id}`).style.display = 'none';
-        ballSize += 1;
+        ballSize += 10;
 
         ballStyle.width = `${ballSize}px`;
         ballStyle.height = `${ballSize}px`;
@@ -95,14 +94,14 @@ setInterval(() => {
 
   ballStyle.top = `${ballPos.top}px`;
   ballStyle.left = `${ballPos.left}px`;
-}, 10);
+}, framerate);
 
 // ============ Apply Friction ============ //
 
 setInterval(() => {
   movementVector[0] = movementVector[0] * (1 - friction);
   movementVector[1] = movementVector[1] * (1 - friction);
-}, 10);
+}, framerate);
 
 // ============ Wall Collision ============ //
 
@@ -125,4 +124,4 @@ setInterval(() => {
     // right
     movementVector[0] = movementVector[0] * -1;
   }
-}, 10)
+}, framerate);
